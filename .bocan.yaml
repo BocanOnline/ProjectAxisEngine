@@ -1,0 +1,18 @@
+project: ProjectTemplate
+description: A template for C++ projects for Bocan Online.
+language: C++
+environment: CMake, Make
+requires:
+  - Git
+  - CMake
+  - Make
+  - Clang
+startup:
+  - nvim . --(open editor at project root)
+other:
+  - ./scripts/build-debug.sh    --(build the debug configuration)
+  - ./scripts/build-release.sh  --(build the release configuration)
+  - ./scripts/run-debug.sh      --(run the application with debug config)
+  - ./scripts/run-release.sh    --(run the application with release config)
+  - ./scripts/clean.sh          --(remove build-debug/ and build-release/) 
+
