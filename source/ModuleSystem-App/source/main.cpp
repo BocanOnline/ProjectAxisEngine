@@ -1,5 +1,5 @@
 //
-// ProjectTemplate
+// ProjectModule System
 // Bocan Online C++ Template Project
 // main.cpp
 //

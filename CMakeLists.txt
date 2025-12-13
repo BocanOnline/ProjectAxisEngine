@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 
-project(Template CXX)
+project(ModuleSystem CXX)
 
 set(APP_NAME ${PROJECT_NAME}-App)
 set(CORE_NAME ${PROJECT_NAME}-Core)

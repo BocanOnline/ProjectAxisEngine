@@ -1,10 +1,10 @@
-session_name: ProjectTemplate
+session_name: ProjectModuleSystem
 windows:
   - window_name: editor-project
     shell_command_before:
-      - cd ~/Developer/BocanOnlineTemplates/cpp
+      - cd ~/Developer/BocanOnline/ProjectModuleSystem/
       - nvim
   - window_name: shell
     shell_command_before:
-      - cd ~/Developer/BocanOnlineTemplates/cpp
+      - cd ~/Developer/BocanOnline/ProjectModuleSystem/
 

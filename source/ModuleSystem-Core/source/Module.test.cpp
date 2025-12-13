@@ -1,6 +1,5 @@
 //
-// ProjectTemplate
-// Bocan Online C++ Template Project
+// ProjectModuleSystem
 // Module.test.cpp
 //
 
