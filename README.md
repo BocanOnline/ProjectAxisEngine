@@ -78,8 +78,6 @@ direction TB
     Module <|-- SlowTicker-Module
     Module <|-- Robot-Module
     Module <|-- Conveyer-Module
-
-classDiagram
 ```
 
 ### Directory Structure
