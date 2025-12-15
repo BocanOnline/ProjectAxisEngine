@@ -7,7 +7,7 @@ file(GLOB_RECURSE CORE_ALL_CXX_SOURCES
 
 file(GLOB_RECURSE CORE_TEST_SOURCES
     CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/source/*.test.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/test/*.test.cpp"
 )
 
 set(CORE_MODULE_SOURCES ${CORE_ALL_CXX_SOURCES})
@@ -33,7 +33,7 @@ if(BUILD_TESTING AND CORE_TEST_SOURCES)
 
         get_filename_component(test_name_raw ${test_file} NAME)
 
-        string(REPLACE ".test.cpp" "_Test" test_name ${test_name_raw})
+        string(REPLACE ".test.cpp" "_test" test_name ${test_name_raw})
         
         message(STATUS "[${CORE_NAME}]: Adding test target ${test_name} from ${test_file}.")
 

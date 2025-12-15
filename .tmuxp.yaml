@@ -1,10 +1,10 @@
-session_name: ProjectModuleSystem
+session_name: ProjectAxisEngine
 windows:
   - window_name: editor-project
     shell_command_before:
-      - cd ~/Developer/BocanOnline/ProjectModuleSystem/
+      - cd ~/Developer/BocanOnline/ProjectAxisEngine/
       - nvim
   - window_name: shell
     shell_command_before:
-      - cd ~/Developer/BocanOnline/ProjectModuleSystem/
+      - cd ~/Developer/BocanOnline/ProjectAxisEngine/
 
