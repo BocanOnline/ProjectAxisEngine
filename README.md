@@ -1,19 +1,84 @@
-# ProjectModuleSystem
-## Implementation of the Module System from Smoothieware.
-
+# ProjectAxisSystem
+## Implementation of the Event/Module System from Smoothieware.
 
 ### Overview
 
-Implementation of the Module System that is part of the application design of
+This is my implementation of the module system that is part of the application design of
 Smoothieware (https://github.com/VandalForge/Smoothieware), the operating system
-designed for use in CNC machines written in C++ by The Smoothie Project. The 
-system uses a module interface to enable developers to add custom modules for 
-increased functionality. Modules register for events with the Kernel and have
-functions called on events.
+designed for use in CNC machines written in C++ by The Smoothie Project. 
 
 ### Architecture
 
 ```mermaid
+---
+config:
+  layout: elk
+---
+classDiagram
+direction TB
+    class Kernel {
+        THEKERNEL = this
+        StreamOutput stream
+
+	    void AddModule(Module* module)
+	    void RegisterForEvent(EVENT event, Module* module)
+	    bool HasEvent(EVENT event, Module* module)
+	    void CallEvent(EVENT event, void* argument)
+    }
+
+    class Module {
+	    enum class EVENT
+	    virtual void OnMainLoop()
+	    virtual void OnConsoleLineReceived()
+	    virtual void OnGcodeReceived()
+	    virtual void OnIdle()
+	    virtual void OnSecondTick()
+	    virtual void OnGetPublicData()
+	    virtual void OnSetPublicData()
+	    virtual void OnHalt()
+	    virtual void OnEnable()
+    }
+
+    class SerialConsole-Module {
+	    void OnModuleLoaded()
+	    void OnMainLoop()
+	    void OnIdle()
+        THEKERNEL->CallEvent(ON_CONSOLE_LINE_RECEIVED)
+    }
+
+    class GcodeDispatch-Module {
+	    void OnModuleLoaded()
+	    void OnConsoleLineReceived()
+        THEKERNEL->CallEvent(ON_GCODE_RECEIVED)
+    }
+
+    class SlowTicker-Module {
+	    void OnModuleLoaded()
+	    void OnIdle()
+        THEKERNEL->CallEvent(ON_SECOND_TICK)
+    }
+
+    class Robot-Module {
+	    void OnModuleLoaded()
+	    void OnGcodeReceived()
+        THEKERNEL->CallEvent(ON_ENABLE)
+    }
+
+    class Conveyer-Module {
+        void OnModuleLoaded()
+        void OnIdle()
+        void OnHalt()
+        THEKERNEL->CallEvent(ON_IDLE)
+        THEKERNEL->CallEvent(ON_ENABLE)
+    }
+
+    Kernel <|-- Module
+    Module <|-- SerialConsole-Module
+    Module <|-- GcodeDispatch-Module
+    Module <|-- SlowTicker-Module
+    Module <|-- Robot-Module
+    Module <|-- Conveyer-Module
+
 classDiagram
 ```
 
@@ -26,8 +91,27 @@ classDiagram
 
 ### Design
 
-[//]: # (TODO: Flesh out design paragrpahs for project.)
+This module/event system design is heavily inspired by the Smoothieware v1.0
+firmware developed by The Smoothie Project for CNC machines. My goal was simply 
+to implement the system as a vehicle for learning as I thought the design was 
+quite clever when I previously worked on the project in college.
 
+I implemented the architecture in similar way using more modern C++ features
+(smart pointers, enum classes, etc.) than is found in the Smoothieware source 
+code. I also separated the user/machine-specific code from the core code (the
+"Axis Engine"), which in theory should make local development for a specific 
+CNC machine straight forward.
+
+I have future plans to incorporate the movement control flow to this and make a
+TUI CNC Machine simulator of sorts.
+
+[//]: # (TODO: Add more narrative about the kernel and functions.)
+[//]: # (TODO: Add more narrative about the core modules and functions.)
+
+### Custom Modules
+
+[//]: # (TODO: Add the instructions for adding custom modules.)
+[//]: # (TODO: Add the instructions for the shape of main.)
 
 ## Build
 
@@ -38,7 +122,7 @@ This project uses CMake to generate the build files.
 ```bash
 # from the desired parent directory
 
-git clone https://github.com/BocanOnline/ProjectModuleSystem
+git clone https://github.com/BocanOnline/ProjectAxisEngine
 
 ```
 
