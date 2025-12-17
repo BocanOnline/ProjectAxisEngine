@@ -6,11 +6,7 @@
 #include <iostream>
 #include <memory>
 
-#include "Kernel.hpp"
-#include "Module.hpp"
-
 #include "Actuator.hpp"
-
 
 Plotter::Actuator::Actuator() {
 
