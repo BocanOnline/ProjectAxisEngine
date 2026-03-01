@@ -9,7 +9,7 @@ file(GLOB_RECURSE APP_ALL_CXX_SOURCES
 
 column_print_list("[${APP_LASER_NAME}]: All Sources:" APP_ALL_CXX_SOURCES)
 
-add_executable(${APP_NAME}
+add_executable(${APP_LASER_NAME}
     ${APP_ALL_CXX_SOURCES}
 )
 
