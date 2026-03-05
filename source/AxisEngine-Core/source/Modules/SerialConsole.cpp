@@ -8,17 +8,43 @@
 // file: SerialConsole.cpp
 ////////////////////////////////////////////////////////////////////////////////
 #include <iostream>
+
 #include <memory>
 
 #include "../Kernel.hpp"
 
+#include "../Events/ConsoleLineReceivedEvent.hpp"
 #include "../Events/MainLoopEvent.hpp"
 #include "../Events/IdleEvent.hpp"
+
+#include "Utils/Structs/SerialMessage.hpp"
+
+#include "Utils/Streams/ConsoleStream.hpp"
+#include "Utils/Streams/FileStream.hpp"
+#include "Utils/Streams/NetworkStream.hpp"
 
 #include "SerialConsole.hpp"
 
 
 Core::SerialConsole::SerialConsole() {
+
+    // TODO
+    // case change for troubleshooting
+    // this will eventually replaced with a kernel config file load
+    int stream_config = 1;
+
+    switch(stream_config) {
+        case 1:
+            m_Stream = std::make_shared<Core::ConsoleStream>();
+            return;
+        case 2:
+            m_Stream = std::make_shared<Core::FileStream>();
+            return;
+        case 3:
+            m_Stream = std::make_shared<Core::NetworkStream>();
+            return;
+        default:
+    }
 
     std::cout << "[SerialConsole.cpp] SerialConsole created..." << std::endl;
 }
@@ -47,11 +73,59 @@ void Core::SerialConsole::OnModuleLoaded() {
 }
 
 void Core::SerialConsole::OnMainLoop(std::shared_ptr<void> argument) {
+    
+    std::cout << "[SerialConsole.cpp] SerialConsole called by MainLoopEvent..." << std::endl; 
 
-    std::cout << "[SerialConsole.cpp] SerialConsole called by MainLoopEvent..." << std::endl;
+    m_LineBuffer = m_Stream->GetLine();
+
+    if(this->HasChar('\x18')) {
+
+        m_HaltFlag = true;
+    }
+
+    if(this->HasChar('?')) {
+
+        m_QueryFlag = true;
+    }
+
+    if(this->HasLine()) {
+
+        std::shared_ptr<Core::SerialMessage> message = std::make_shared<Core::SerialMessage>();
+        message->message = m_LineBuffer; 
+    
+        std::cout << "[SerialConsole.cpp] SerialMessage Received..." << std::endl;
+
+        Core::ConsoleLineReceivedEvent on_console_line_received_event;
+        Core::Kernel::Get().CallEvent(on_console_line_received_event, message);
+    }
 }
 
 void Core::SerialConsole::OnIdle(std::shared_ptr<void> argument) {
 
     std::cout << "[SerialConsole.cpp] SerialConsole called by IdleEvent..." << std::endl;
+}
+
+bool Core::SerialConsole::HasLine() {
+
+    if(m_LineBuffer.empty()) {
+        
+        return false;
+    }
+
+    if(!m_LineBuffer.find('\n')) {
+
+        return false;
+    }
+
+    return true;
+}
+
+bool Core::SerialConsole::HasChar(char letter) {
+  
+    if(m_LineBuffer.find(letter)) {
+
+        return true;
+    }
+
+    return false;
 }

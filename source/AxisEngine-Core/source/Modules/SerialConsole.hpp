@@ -13,13 +13,8 @@
 
 #include "../Module.hpp"
 
-////////////////////////////////////////////////////////////////////////////////
-// PLAN
-//
-// 1. implement filesystem import line by line to parse .gcode program.
-// 2. implement interrupt driven import line by line to parse .gcode program.
-//
-////////////////////////////////////////////////////////////////////////////////
+#include "Utils/Streams/Stream.hpp"
+
 
 namespace Core {
 
@@ -34,6 +29,16 @@ namespace Core {
         void OnMainLoop(std::shared_ptr<void> argument) override;
         void OnIdle(std::shared_ptr<void> argument) override;
 
+    private:
+        std::shared_ptr<Core::Stream> m_Stream;
+        std::string m_LineBuffer;
+
+        bool m_HaltFlag = false;
+        bool m_QueryFlag = false;
+
+    private:
+        bool HasLine();
+        bool HasChar(char letter);
     };
 
 } // namespace Core
