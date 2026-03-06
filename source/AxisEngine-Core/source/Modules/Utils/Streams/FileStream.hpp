@@ -9,6 +9,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include <fstream>
+
 #include "Stream.hpp"
 
 namespace Core {
@@ -24,6 +26,9 @@ namespace Core {
 
         virtual bool PutChar() override;
         virtual bool PutLine() override;
+
+    private:
+        std::ifstream file;
     };
 
 } // namespace Core

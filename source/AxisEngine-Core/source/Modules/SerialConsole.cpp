@@ -32,7 +32,7 @@ Core::SerialConsole::SerialConsole() {
     // TODO
     // case change for troubleshooting
     // this will eventually replaced with a kernel config file load
-    int stream_config = 1;
+    int stream_config = 2;
 
     switch(stream_config) {
         case 1:
@@ -100,6 +100,7 @@ void Core::SerialConsole::OnMainLoop(std::shared_ptr<void> argument) {
         message->message = m_LineBuffer; 
     
         std::cout << "[SerialConsole.cpp] SerialMessage Received..." << std::endl;
+        std::cout << "[SerialConsole.cpp] " << m_LineBuffer << std::endl;
 
         Core::ConsoleLineReceivedEvent on_console_line_received_event;
         Core::Kernel::Get().CallEvent(on_console_line_received_event, message);
@@ -120,12 +121,9 @@ void Core::SerialConsole::OnIdle(std::shared_ptr<void> argument) {
 bool Core::SerialConsole::HasLine() {
 
     if(m_LineBuffer.empty()) {
+    
+        std::cout << "[SerialConsole.cpp] m_LineBuffer empty..." << std::endl;
         
-        return false;
-    }
-
-    if(!m_LineBuffer.find('\n')) {
-
         return false;
     }
 

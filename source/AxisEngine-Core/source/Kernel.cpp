@@ -9,6 +9,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 #include <iostream>
 #include <unordered_map>
+#include <thread>
+#include <chrono>
 
 #include "Kernel.hpp"
 
@@ -64,6 +66,8 @@ void Core::Kernel::Run() {
 
         IdleEvent on_idle_event;
         Core::Kernel::Get().CallEvent(on_idle_event, nullptr);
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }
 
